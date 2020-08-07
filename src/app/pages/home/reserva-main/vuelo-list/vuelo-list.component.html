@@ -1,0 +1,35 @@
+<div>
+    <div class="text-center">
+        <fa-icon class="fa-5x" [icon]="faListAlt"></fa-icon>
+    </div>
+    <hr>
+    <table class="table table-hover">
+        <thead class="bg-info">
+            <tr>
+                <th>
+                    Nº de Vuelo
+                </th>
+                <th>
+                    Ubicacion
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of vuelos; let i = index">
+
+                <td>
+                    {{item.nombre}}
+                </td>
+                <td>
+                    {{item.ubicacion}}
+                </td>
+                <td class="btn-group">
+                    <button [routerLink]="['/home/vuelo', item.nombre]" class="btn btn-sm btn-info"><fa-icon [icon]="faEye"></fa-icon></button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <router-outlet></router-outlet>
+</div>

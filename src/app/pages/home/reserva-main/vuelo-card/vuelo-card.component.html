@@ -1,0 +1,34 @@
+<div>
+    <div class="text-center">
+        <fa-icon class="fa-5x" [icon]="faListAlt"></fa-icon>
+    </div>
+    <hr>
+    <h4><b>Nª de Vuelo: </b>{{vuelo.nombre}}</h4>
+    <h5><b>Asiento: </b>{{vuelo.ubicacion}}</h5>
+    <table class="table table-hover">
+        <thead class="bg-info">
+            <tr>
+                <th>
+                    Nº de Vuelo
+                </th>
+                <th>
+                    Ubicacion
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of vuelo.rutas; let i = index">
+
+                <td>
+                    {{item.nombre}}
+                </td>
+                <td>
+                    {{item.fecha}}
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <router-outlet></router-outlet>
+</div>

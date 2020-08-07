@@ -1,0 +1,72 @@
+<div class="limiter animated fadeInRight">
+    <div class="container-login100">
+        <div class="wrap-login100 p-t-50 p-b-90">
+
+            <form (ngSubmit)="onSubmit( f )" #f="ngForm" class="login100-form validate-form flex-sb flex-w">
+
+                <span class="login100-form-title p-b-51">
+                    Crear Reserva
+                </span>
+
+                <span *ngIf="f.submitted && f.controls['nombre'].errors" class="text-danger animated fadeIn">El nombre es obligatorio</span>
+
+                <div class="wrap-input100 m-b-16">
+                    <input class="input100" type="text" name="nombre" [(ngModel)]="reserva.pasajero.nombre" placeholder="Nombre">
+
+                    <span class="focus-input100"></span>
+                </div>
+                <b><label>Fecha de Registro</label></b>
+                <span *ngIf="f.submitted && f.controls['fecha'].errors" class="text-danger animated fadeIn">Fecha</span>
+                <div class="wrap-input100 m-b-16">
+                    <input class="input100" type="date" name="fecha" [(ngModel)]="reserva.fecha" value="{{date}}">
+
+                    <span class="focus-input100"></span>
+                </div>
+                <b><label>Nª de Vuelo</label></b>
+                <div class="wrap-input100 m-b-16">
+                    <select name="numvuelo" [(ngModel)]="reserva.vuelo.nombre" class="custom-select">
+                        <option *ngFor="let tipo of vuelos" [value]="tipo.nombre">
+                          {{ tipo.nombre }}
+                        </option>
+                      </select>
+                    <span class="focus-input100"></span>
+                </div>
+                <b><label>Destino</label></b>
+                <div class="wrap-input100 m-b-16">
+                    <select name="rutanombre" [(ngModel)]="reserva.ruta.nombre" class="custom-select">
+                        <option *ngFor="let tipo of rutas" [value]="tipo.nombre">
+                          {{ tipo.nombre }}
+                        </option>
+                      </select>
+                    <span class="focus-input100"></span>
+                </div>
+                <b><label>Fecha de Salida</label></b>
+                <div class="wrap-input100 m-b-16">
+                    <select name="salida" [(ngModel)]="reserva.ruta.fecha" class="custom-select">
+                        <option *ngFor="let tipo of rutas" [value]="tipo.fecha">
+                          {{ tipo.fecha}}
+                        </option>
+                      </select>
+                    <span class="focus-input100"></span>
+                </div>
+                <b><label>Asiento</label></b>
+                <div class="wrap-input100 m-b-16">
+                    <select name="asiento" [(ngModel)]="reserva.vuelo.ubicacion" class="custom-select">
+                        <option *ngFor="let tipo of vuelos" [value]="tipo.ubicacion">
+                          {{ tipo.ubicacion}}
+                        </option>
+                      </select>
+                    <span class="focus-input100"></span>
+                </div>
+                <b><label>Código Único de Reservacion</label></b><br>
+                <qrcode [level]="1" [qrvalue]="message" [(ngModel)]="reserva.codigo"></qrcode>
+                <div class="container-login100-form-btn m-t-17">
+                    <button class="login100-form-btn" type="submit">
+                        Registrar Reserva
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <pre>{{reserva | json}}</pre>
+</div>

@@ -1,0 +1,54 @@
+<div>
+    <div class="text-center">
+        <fa-icon class="fa-5x" [icon]="faListAlt"></fa-icon>
+    </div>
+    <hr>
+    <button routerLink="/home/create" class="btn btn-sm btn-success"><fa-icon [icon]="faPencilAlt"></fa-icon>Nueva Reserva</button>
+    <table class="table table-hover">
+        <thead class="bg-info">
+            <tr>
+                <th>
+                    Fecha
+                </th>
+                <th>
+                    Pasajero
+                </th>
+                <th>
+                    Vuelo
+                </th>
+                <th>
+                    Ruta
+                </th>
+                <th>
+                    Salida
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of reservas; let i = index">
+
+                <td>
+                    {{item.fecha}}
+                </td>
+                <td>
+                    {{item.pasajero.nombre}}
+                </td>
+                <td>
+                    {{item.vuelo.nombre}}
+                </td>
+                <td>
+                    {{item.ruta.nombre}}
+                </td>
+                <td>
+                    {{item.ruta.fecha}}
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <td class="btn-group">
+        <button routerLink="/home/vuelo" class="btn btn-sm btn-info"><fa-icon [icon]="faEye"></fa-icon> Información de Vuelos</button>
+    </td>
+    <router-outlet></router-outlet>
+</div>

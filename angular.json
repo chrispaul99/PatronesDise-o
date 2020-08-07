@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "Examen2p"
+    }
+  },
+  "defaultProject": "Examen2p",
+  "cli": {
+    "analytics": "1bb21c7d-acbf-4230-9f5b-6402631472c1"
+  }
 }
