@@ -7,6 +7,8 @@ import { Vuelo } from 'src/app/models/DesignPatterns/Prototype/Vuelo';
 import { Ruta } from 'src/app/models/DesignPatterns/Prototype/Ruta';
 import { PrototypeFactory } from 'src/app/models/DesignPatterns/Prototype/PrototypeFactory';
 import { RutasFactory } from 'src/app/models/DesignPatterns/FlyWeight/RutasFactory';
+import { Item } from '../../../../models/DesignPatterns/State/Item';
+import { ItemAdded } from 'src/app/models/DesignPatterns/State/ItemAdded';
 @Component({
   selector: 'app-reserva-list',
   templateUrl: './reserva-list.component.html',
@@ -20,10 +22,19 @@ export class ReservaListComponent implements OnInit {
   reservas: Reserva[];
   vuelos: Vuelo[];
   rutas: Ruta[];
+  mensaje: string;
+  objItem: Item = new Item();
   constructor(private router: Router, private reservaService: ReservaService) { }
 
   ngOnInit(): void {
     this.list();
+
+    // USO DEL PATRON STATE
+    if (this.reservaService.getBan()) {
+      this.objItem.setState(new ItemAdded());
+    }
+    this.mensaje = this.objItem.show();
+    console.log(this.mensaje);
   }
   list(): void {
     this.reservaService.list().subscribe(result => {

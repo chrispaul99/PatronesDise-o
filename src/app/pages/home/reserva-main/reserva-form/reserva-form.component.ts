@@ -12,12 +12,15 @@ import { AuthService } from '../../../../services/auth.service';
 import { Ticket } from 'src/app/models/DesignPatterns/Bridge/BridgeImpl/Ticket';
 import { AESEncryptAlgorithm } from 'src/app/models/DesignPatterns/Bridge/BridgeEncript/AESEncryptAlgorithm';
 import { RutasFactory } from '../../../../models/DesignPatterns/FlyWeight/RutasFactory';
+import { TransactionMethod } from '../../../../models/DesignPatterns/Strategy/TransactionMethod';
+import { Create } from '../../../../models/DesignPatterns/Strategy/Create';
 @Component({
   selector: 'app-reserva-form',
   templateUrl: './reserva-form.component.html',
   styleUrls: ['./reserva-form.component.css']
 })
 export class ReservaFormComponent implements OnInit {
+  context: TransactionMethod;
   reserva: Reserva;
   title: string;
   vuelos: Vuelo[];
@@ -46,7 +49,7 @@ export class ReservaFormComponent implements OnInit {
     console.log(this.vuelos);
   }
 
-  onSubmit( form: NgForm ) {
+  onSubmit( form: NgForm ): void {
 
     if ( form.invalid ) { console.log(form); return; }
 
@@ -57,37 +60,20 @@ export class ReservaFormComponent implements OnInit {
     });
     Swal.showLoading();
 
-    this.reservaService.reservar( this.reserva )
-      .subscribe( resp => {
-
-        console.log(resp);
-        Swal.fire({
-          allowOutsideClick: false,
-          icon: 'success',
-          title: 'Correcto',
-          text: 'Reserva Registrada correctamente'
-        });
-        this.router.navigateByUrl('/home');
-
-      }, (err) => {
-        console.log(err.error.error.message);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error al autenticar',
-          text: err.error.error.message
-        });
-      });
+    // USO DEL PATRON STRATEGY
+    this.context = new TransactionMethod(new Create(this.reservaService, this.router));
+    this.context.triggerTransaction(this.reserva);
   }
 
 
 
 
     // USO DE PATRON BRIDGE
-    Encriptar(mens: string) {
-     this.message = this.aesImpl.encryptMessage(mens, 'HG58YZ3CR9123456');
-   }
+    Encriptar(mens: string): void {
+      this.message = this.aesImpl.encryptMessage(mens, 'HG58YZ3CR9123456');
+    }
   // PATRON PROTOTYPE
-  getvuelos(){
+    getvuelos(): void {
     this.gestionarRutas();
     let vueloGuia = new Vuelo();
     vueloGuia = new Vuelo('AIR-99', 'C99');
@@ -131,38 +117,39 @@ export class ReservaFormComponent implements OnInit {
     }
 
    // USO DEL PATRON FLYWEIGHT
-    gestionarRutas(){
-     RutasFactory.enableFlyweight = true;
-     this.initArrays();
-   }
-   initArrays(){
-    const rutas = {Rutas: [
-      {
-        Nombre: 'Madrid',
-        fecha: '24/05/2017',
-      },
-      {
-        Nombre: 'Bogota',
-        fecha: '10/1/2018',
-      },
-      {
-        Nombre: 'Lima',
-        fecha: '11/06/2018',
-      },
-      {
-        Nombre: 'Quito',
-        fecha: '24/05/2017',
-      },
-      {
-        Nombre: 'Latacunga',
-        fecha: '10/1/2018',
-      },
-      {
-        Nombre: 'Guayaquil',
-        fecha: '11/06/2018',
-      },
-    ]};
-    const vuelos = {Vuelos: [
+    gestionarRutas(): void {
+      RutasFactory.enableFlyweight = true;
+      this.initArrays();
+    }
+
+    initArrays(): void {
+      const rutas = {Rutas: [
+        {
+          Nombre: 'Madrid',
+          fecha: '24/05/2017',
+        },
+        {
+          Nombre: 'Bogota',
+          fecha: '10/1/2018',
+        },
+        {
+          Nombre: 'Lima',
+          fecha: '11/06/2018',
+        },
+        {
+          Nombre: 'Quito',
+          fecha: '24/05/2017',
+        },
+        {
+          Nombre: 'Latacunga',
+          fecha: '10/1/2018',
+        },
+        {
+          Nombre: 'Guayaquil',
+          fecha: '11/06/2018',
+        },
+      ]};
+      const vuelos = {Vuelos: [
       {
         Nombre: 'AIR-850',
         Ubicacion: 'F14',
@@ -184,17 +171,17 @@ export class ReservaFormComponent implements OnInit {
         Ubicacion: 'J55',
       },
     ]};
-    for(let l = 0; l < vuelos.Vuelos.length;l++){
+      for(let l = 0; l < vuelos.Vuelos.length;l++){
       let vuelo =  new Vuelo(vuelos.Vuelos[l].Nombre, vuelos.Vuelos[l].Ubicacion);
       this.vuelos.push(vuelo);
     }
-    for (let l = 0; l < rutas.Rutas.length; l++){
+      for (let l = 0; l < rutas.Rutas.length; l++){
       const ruta = new Ruta(rutas.Rutas[l].Nombre, rutas.Rutas[l].fecha);
       this.rutas.push(ruta);
     }
-   }
+  }
    // tslint:disable-next-line: typedef
-   getRandomNumberBetween(min, max){
+  getRandomNumberBetween(min, max){
     return Math.floor(Math.random() * (max - min + 1 ) + min);
-}
+  }
 }
