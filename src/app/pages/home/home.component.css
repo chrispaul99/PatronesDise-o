@@ -283,3 +283,13 @@ svg#clouds {
         visibility: hidden;
     }
 }
+
+.primary {
+    background: #FDFEFE;
+    color: #555;
+}
+
+.secundary {
+    background: #5D6D7E;
+    color: #ddd;
+}

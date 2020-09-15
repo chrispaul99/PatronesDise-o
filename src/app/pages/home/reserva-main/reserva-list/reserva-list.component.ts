@@ -7,8 +7,11 @@ import { Vuelo } from 'src/app/models/DesignPatterns/Prototype/Vuelo';
 import { Ruta } from 'src/app/models/DesignPatterns/Prototype/Ruta';
 import { PrototypeFactory } from 'src/app/models/DesignPatterns/Prototype/PrototypeFactory';
 import { RutasFactory } from 'src/app/models/DesignPatterns/FlyWeight/RutasFactory';
+import Swal from 'sweetalert2';
 import { Item } from '../../../../models/DesignPatterns/State/Item';
 import { ItemAdded } from 'src/app/models/DesignPatterns/State/ItemAdded';
+import { TransactionMethod } from 'src/app/models/DesignPatterns/Strategy/TransactionMethod';
+import { Delete } from '../../../../models/DesignPatterns/Strategy/Delete';
 @Component({
   selector: 'app-reserva-list',
   templateUrl: './reserva-list.component.html',
@@ -24,6 +27,7 @@ export class ReservaListComponent implements OnInit {
   rutas: Ruta[];
   mensaje: string;
   objItem: Item = new Item();
+  context: TransactionMethod;
   constructor(private router: Router, private reservaService: ReservaService) { }
 
   ngOnInit(): void {
@@ -39,6 +43,24 @@ export class ReservaListComponent implements OnInit {
   list(): void {
     this.reservaService.list().subscribe(result => {
       this.reservas = result;
+    });
+  }
+
+  eliminar(id: string): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'La reserva se eliminará.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // USO DEL PATRON STRATEGY
+        this.context = new TransactionMethod(new Delete(this.reservaService));
+        this.context.triggerTransaction(id);
+      }
     });
   }
 }

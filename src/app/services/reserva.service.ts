@@ -11,6 +11,7 @@ export class ReservaService {
   ban: boolean;
   private url = 'https://reservavuelos-89719.firebaseio.com';
   private apikey = 'AIzaSyBfw_M5_a-bT265Rpu-NC-1_o_pDb88yIE';
+  private token: string;
   constructor(private  http: HttpClient) { }
 
   list(){
@@ -22,10 +23,11 @@ export class ReservaService {
     return this.http.post(`${this.url}/Reserva.json`, reserva);
   }
 
-  /* delete() {
-    return this.http.delete(`$_url/Reserva/$id.json?auth=${ _prefs.token }';
-    final resp = await http.delete(url);`);
-  } */
+  delete(id: string) {
+    this.token = localStorage.getItem('token');
+    return this.http.delete(`${this.url}/Reserva/${id}.json?auth=${this.token}`);
+  }
+
   private crearArreglo(res: object){
     const reservas: Reserva[] = [];
     Object.keys(res).forEach(key => {

@@ -42,7 +42,7 @@ export class ReservaFormComponent implements OnInit {
     this.date = new Date();
     this.date.getDate();
     console.log(this.date);
-    this.message = this.auth.preferenciaSingleton.leerToken().split('A', 1)[0];
+    this.message = this.auth.leerToken().split('A', 1)[0];
     this.Encriptar(this.message);
     this.reserva.codigo = this.message;
     console.log(this.rutas);

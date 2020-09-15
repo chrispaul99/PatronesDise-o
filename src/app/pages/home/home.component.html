@@ -4,12 +4,13 @@
         <span>ESPE AIR</span>
     </a>
     <div class="spacer"></div>
+    <button class="btn btn-dark" (click)="modoOscuro()">Modo Oscuro</button>
     <button class="btn btn-danger center" (click)="salir()">
     Cerrar Sesión
   </button>
 </div>
 
-<div class="content" role="main">
+<div class="content" role="main" [ngStyle]="{'background':color === 'primary' ? '#FDFEFE' : '#5D6D7E', 'color':color === 'primary' ? '#555' : '#ddd' }">
 
     <!-- Highlight Card -->
     <div class="card highlight-card card-small">

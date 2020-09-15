@@ -13,6 +13,7 @@ export class AuthService {
   private url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty';
   private apikey = 'AIzaSyBfw_M5_a-bT265Rpu-NC-1_o_pDb88yIE';
   preferenciaSingleton: PreferenciaSingleton;
+  userToken: string;
   // Crear nuevo usuario
   // https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=[API_KEY]
 
@@ -22,8 +23,7 @@ export class AuthService {
 
 
   constructor( private http: HttpClient ) {
-    this.preferenciaSingleton = PreferenciaSingleton.getInstance();
-    this.preferenciaSingleton.leerToken();
+    this.leerToken();
   }
 
 
@@ -43,7 +43,7 @@ export class AuthService {
       authData
     ).pipe(
       map( resp => {
-        this.preferenciaSingleton.guardarToken( resp['idToken'] );
+        this.guardarToken( resp['idToken'] );
         return resp;
       })
     );
@@ -62,11 +62,51 @@ export class AuthService {
       authData
     ).pipe(
       map( resp => {
-        this.preferenciaSingleton.guardarToken( resp['idToken'] );
+        this.guardarToken( resp['idToken'] );
         return resp;
       })
     );
 
+  }
+
+  guardarToken( idToken: string ) {
+
+    this.userToken = idToken;
+    localStorage.setItem('token', idToken);
+
+    const hoy = new Date();
+    hoy.setSeconds( 3600 );
+
+    localStorage.setItem('expira', hoy.getTime().toString() );
+  }
+  leerToken() {
+
+    if ( localStorage.getItem('token') ) {
+      this.userToken = localStorage.getItem('token');
+    } else {
+      this.userToken = '';
+    }
+
+    return this.userToken;
+
+  }
+
+
+  estaAutenticado(): boolean {
+
+    if ( this.userToken.length < 2 ) {
+      return false;
+    }
+
+    const expira = Number(localStorage.getItem('expira'));
+    const expiraDate = new Date();
+    expiraDate.setTime(expira);
+
+    if ( expiraDate > new Date() ) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 }
